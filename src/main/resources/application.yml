@@ -4,9 +4,11 @@ spring:
   port: 8081
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/user
-    username: postgres
-    password: root
+    # Read database connection settings from environment variables or use local defaults.
+    # For CI/CD, set DB_URL, DB_USER and DB_PASSWORD as GitHub Secrets and map them into the workflow.
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/user}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:}
 
   jpa:
     hibernate:

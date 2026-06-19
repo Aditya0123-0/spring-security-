@@ -27,3 +27,26 @@ Notes:
 - GitHub Pages can only serve static content. A Spring Boot application cannot be hosted on GitHub Pages. The release workflow attaches the executable JAR so you can run it elsewhere (e.g., a VM, container registry, cloud service).
 - If you want automatic deployments to a runtime host (Heroku, Render, AWS, GCP, or Azure) instead of Pages, I can add workflows to build a Docker image and push it to GitHub Container Registry or deploy to the provider of your choice.
 
+Security / secrets
+
+Do NOT hardcode database credentials or other secrets in `application.yml` or source files. The workflows in this repository expect secrets to be provided via GitHub Secrets. Recommended approaches:
+
+- Use GitHub repository secrets (Settings → Secrets → Actions) named `DB_URL`, `DB_USER`, `DB_PASSWORD`.
+- In CI workflows these are mapped into environment variables and consumed by Spring Boot via placeholders in `application.yml` (see `spring.datasource.*` entries).
+- For local development you can set environment variables, use a local `application-local.yml` excluded from git, or use a local `.env` loaded by your IDE (but never commit secrets).
+
+Set secrets via the GitHub web UI or using the `gh` CLI:
+
+```powershell
+# using GitHub CLI
+gh secret set DB_URL --body "jdbc:postgresql://db-host:5432/dbname"
+gh secret set DB_USER --body "dbuser"
+gh secret set DB_PASSWORD --body "s3cr3t"
+```
+
+More secure options for production:
+
+- Use GitHub Environments with environment-scoped secrets and required reviewers.
+- Use a secrets manager (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault) and fetch secrets at runtime with short-lived tokens or OIDC.
+- Use Testcontainers for CI tests to avoid sharing real DB credentials (recommended for integration tests).
+
