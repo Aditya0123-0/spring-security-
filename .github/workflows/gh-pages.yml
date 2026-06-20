@@ -10,7 +10,6 @@ jobs:
   build-and-deploy-javadoc:
     runs-on: ubuntu-latest
 
-    # 1. ADD WRITE PERMISSIONS TO ALLOW BLANKET PUSHES TO GH-PAGES
     permissions:
       contents: write
 
@@ -25,13 +24,13 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # 2. RUN JAVADOC GENERATION
-      - name: Build Javadoc
-        run: mvn -B javadoc:javadoc
+      # 1. GENERATE THE COMPLETE DOCUMENTATION SITE (Skips tests to avoid DB crashes)
+      - name: Build Javadoc Site
+        run: mvn clean site -DskipTests
 
-      # 3. UPGRADED TO V4 AND PROVIDED EXPLICIT TOKEN
+      # 2. DEPLOY THE GENERATED ASSETS
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.TOKEN }}
-          publish_dir: ./target/apidocs
+          github_token: ${{ secrets.TOKEN }} # <-- Keeping your custom secret name
+          publish_dir: ./target/site/apidocs
