@@ -27,11 +27,11 @@ jobs:
 
       # 2. RUN JAVADOC GENERATION
       - name: Build Javadoc
-        run: mvn clean site
+        run: mvn -B javadoc:javadoc
 
       # 3. UPGRADED TO V4 AND PROVIDED EXPLICIT TOKEN
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.TOKEN }}
-          publish_dir: ./target/site/apidocs
+          publish_dir: ./target/apidocs
