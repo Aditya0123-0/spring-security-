@@ -49,5 +49,5 @@ jobs:
           asset_name: security-jpa-${{ github.ref_name }}.jar
           asset_content_type: application/java-archive
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
