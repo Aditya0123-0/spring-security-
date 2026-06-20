@@ -27,7 +27,7 @@ jobs:
 
       # 2. RUN JAVADOC GENERATION
       - name: Build Javadoc
-        run: mvn -B javadoc:javadoc
+        run: mvn clean site
 
       # 3. UPGRADED TO V4 AND PROVIDED EXPLICIT TOKEN
       - name: Deploy to GitHub Pages
